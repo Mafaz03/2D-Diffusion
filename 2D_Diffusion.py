@@ -61,11 +61,13 @@ class node:
         self.del_xw = None
         self.del_xs = None
 
-def Diffusion_2D(dx, dy, Lx,  Ly, x_percentage, y_percentage, index_x, index_y, q_E, T_N, T_S):
+def Diffusion_2D(dx, dy, Lx,  Ly, x_percentage, y_percentage, index_x, index_y, q_E, T_N, T_S, Sp, Su):
     dx = float(dx)
     dy = float(dy)
     Lx = float(Lx)
     Ly = float(Ly)
+    Sp = float(Sp)
+    Su = float(Su)
     x_percentage = float(x_percentage)
     y_percentage = float(y_percentage)
     index_x = int(index_x)
@@ -250,8 +252,8 @@ def Diffusion_2D(dx, dy, Lx,  Ly, x_percentage, y_percentage, index_x, index_y, 
 
             # -----------------------------
             k_cell = 16 * ((cell.Gy + (cell.Cell_size_y/2)) / Ly + 1)
-            Sp = (1.5 * cell.Cell_size_x * cell.Cell_size_y) / T_old[node_idx] if T_old[node_idx] > 0.01 else 1
-            Su = 0
+            Sp = (Sp * cell.Cell_size_x * cell.Cell_size_y) / T_old[node_idx] if T_old[node_idx] > 0.01 else 1
+            # Su = 0
             # Su += Sp * T_old[node_idx]
             # -----------------------------
 
@@ -415,9 +417,11 @@ demo = gr.Interface(
         gr.Textbox(label="q_E", value = "5000"),
         gr.Textbox(label="T_N", value = "10"),
         gr.Textbox(label="T_S", value = "15"),
+        gr.Textbox(label="Sp", value = "1.5"),
+        gr.Textbox(label="Su", value = "0"),
     ],
     outputs=gr.Plot(label="Temperature Contour"),
 )
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(share=True)
